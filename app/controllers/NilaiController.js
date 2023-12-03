@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 const Nilai = require('../models/Nilai')
+const Mahasiswa = require('../models/Mahasiswa')
 
 const NilaiController = {
     getNilaiBySiswa: async (req, res) => {
         try {
-            const data = await Nilai.find({ nis_siswa: req.params.nis })
+            const data = await Nilai.find({ nis_siswa: req.params.nis }).populate('id_matkul')
             if (data.length === 0) {
                 res.status(400).json({
                     message: "Data tidak ditemukan",
@@ -28,6 +29,7 @@ const NilaiController = {
     getNilaiByMatkul: async (req, res) => {
         try {
             const data = await Nilai.find({ id_matkul: new mongoose.Types.ObjectId(req.params.id_matkul) })
+
             if (data.length === 0) {
                 res.status(400).json({
                     message: "Data tidak ditemukan",
@@ -38,9 +40,18 @@ const NilaiController = {
                 return;
             }
 
+            const newData = await Promise.all(data.map(async (nilai) => {
+                const mahasiswaData = await Mahasiswa.findOne({ nis: nilai.nis_siswa });
+
+                return {
+                    data: nilai,
+                    mahasiswa: mahasiswaData
+                };
+            }));
+
             res.status(200).json({
                 message: "Data berhasil di temukan",
-                data: data
+                data: newData
             })
         } catch (error) {
             res.status(500).json({

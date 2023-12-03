@@ -94,7 +94,7 @@ const MahasiswaController = {
     },
     updateSiswa: async (req, res) => {
         try {
-            const data = await Mahasiswa.updateOne({ nis: req.params.nis }, req.body)
+            const data = await Mahasiswa.findOneAndUpdate({ nis: req.params.nis }, req.body)
             if (data.matchedCount == 0) {
                 res.status(400).json({
                     message: "Data siswa tidak ditemukan",
