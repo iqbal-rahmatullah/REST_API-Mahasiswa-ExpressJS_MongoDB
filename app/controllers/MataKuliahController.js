@@ -47,6 +47,7 @@ const MataKuliahController = {
                     message: "Validation Error",
                     error: validationErrors
                 })
+                return;
             } else {
                 res.status(500).json({
                     message: "Terjadi kesalahan server",
@@ -58,13 +59,14 @@ const MataKuliahController = {
     deleteMatakuliah: async (req, res) => {
         try {
             const data = await MataKuliah.findByIdAndDelete(new mongoose.Types.ObjectId(req.params.id))
-            if (data === null) {
+            if (data.deletedCount === 0) {
                 res.status(400).json({
                     message: "Data tidak di temukan",
                     data: {
                         _id: req.params.id
                     }
                 })
+                return;
             }
             res.status(200).json({
                 message: "Data berhasil di hapus",
@@ -82,13 +84,14 @@ const MataKuliahController = {
     updateMataKuliah: async (req, res) => {
         try {
             const data = await MataKuliah.findByIdAndUpdate(new mongoose.Types.ObjectId(req.params.id), req.body)
-            if (data === null) {
+            if (data.updatedCount === 0) {
                 res.status(400).json({
                     message: "Data tidak ditemukan",
                     data: {
                         id: req.params.id
                     }
                 })
+                return;
             }
 
             res.status(200).json({

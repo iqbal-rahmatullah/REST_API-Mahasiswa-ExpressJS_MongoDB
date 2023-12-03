@@ -16,8 +16,6 @@ const mahasiswaSchema = new Schema({
     },
     nohp: {
         type: String,
-        minlength: [10, "Minimal 10 digit"],
-        maxlength: [12, "Maximal 12 digit"],
         required: true,
     },
     ttl: {

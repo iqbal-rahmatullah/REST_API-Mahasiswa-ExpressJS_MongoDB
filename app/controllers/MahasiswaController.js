@@ -20,10 +20,11 @@ const MahasiswaController = {
         try {
             const response = await Mahasiswa.findOne({ nis: req.params.nis })
 
-            if (!response) {
+            if (response.length === 0) {
                 res.status(400).json({
                     message: "Data tidak ditemukan"
                 })
+                return;
             }
             res.status(200).json({
                 message: "Get data success",
@@ -54,6 +55,7 @@ const MahasiswaController = {
                     message: "Validasi gagal",
                     errors: validationErrors
                 });
+                return;
             } else {
                 console.error(error);
                 res.status(500).json({
@@ -74,6 +76,7 @@ const MahasiswaController = {
                         nis: req.params.nis
                     }
                 })
+                return;
             }
 
             res.status(200).json({
@@ -97,6 +100,7 @@ const MahasiswaController = {
                     message: "Data siswa tidak ditemukan",
                     data: req.params.nis
                 })
+                return;
             }
 
             res.json({

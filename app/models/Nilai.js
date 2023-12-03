@@ -3,7 +3,7 @@ const { Schema } = require('mongoose')
 
 const NilaiSchema = new Schema({
     id_matkul: {
-        type: Number,
+        type: Schema.ObjectId,
         required: true,
     },
     nis_siswa: {
